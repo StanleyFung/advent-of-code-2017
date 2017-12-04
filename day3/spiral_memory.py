@@ -41,11 +41,11 @@ def partOne(input):
 
     nSquared = pow(n, 2)
     TOP_RIGHT_VAL = nSquared + (n + 1)
-    print("TOP_RIGHT_VAL " + str(TOP_RIGHT_VAL))
+    # print("TOP_RIGHT_VAL " + str(TOP_RIGHT_VAL))
     TOP_LEFT_VAL = nSquared + 2 * (n + 1)
-    print("TOP_LEFT_VAL " + str(TOP_LEFT_VAL))
+    # print("TOP_LEFT_VAL " + str(TOP_LEFT_VAL))
     BOTTOM_LEFT_VAL = nSquared + 3 * (n + 1)
-    print("BOTTOM_LEFT_VAL " + str(BOTTOM_LEFT_VAL))
+    # print("BOTTOM_LEFT_VAL " + str(BOTTOM_LEFT_VAL))
 
     inputX = 0
     inputY = 0
@@ -66,14 +66,16 @@ def partOne(input):
         inputX = int(-(n + 2) / 2) + (input - BOTTOM_LEFT_VAL)
         inputY = int(-(n + 2) / 2)
 
-    return abs(inputX) + abs(inputY)
+    result = abs(inputX) + abs(inputY)
+    print("Output: " + str(result))
+    return result
 
-# assert(partOne(1) == 0)
-# assert(partOne(2) == 1)
-# assert(partOne(4) == 1)
-# assert(partOne(7) == 2)
-# assert(partOne(25) == 4)
-# print(partOne(368078))
+assert(partOne(1) == 0)
+assert(partOne(2) == 1)
+assert(partOne(4) == 1)
+assert(partOne(7) == 2)
+assert(partOne(25) == 4)
+print(partOne(368078))
 
 # --- Part Two ---
 
@@ -182,7 +184,9 @@ def partTwo(input):
             if currentValue > input:
                 done = True
 
+    print("Output: " + str(currentValue))
     return currentValue
+
 
 assert(partTwo(1) == 2)
 assert(partTwo(2) == 4)
