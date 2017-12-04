@@ -20,7 +20,7 @@
 # How many steps are required to carry the data from the square identified in your puzzle input all the way to the access port?
 
 
-def main(input):
+def partOne(input):
     print("Input: " + str(input))
     if input == 1:
         return 0
@@ -68,12 +68,12 @@ def main(input):
 
     return abs(inputX) + abs(inputY)
 
-assert(main(1) == 0)
-assert(main(2) == 1)
-assert(main(4) == 1)
-assert(main(7) == 2)
-assert(main(25) == 4)
-print(main(368078))
+# assert(partOne(1) == 0)
+# assert(partOne(2) == 1)
+# assert(partOne(4) == 1)
+# assert(partOne(7) == 2)
+# assert(partOne(25) == 4)
+# print(partOne(368078))
 
 # --- Part Two ---
 
@@ -94,3 +94,99 @@ print(main(368078))
 # 351   11   23   25   26
 # 362  747  806--->   ...
 # What is the first value written that is larger than your puzzle input?
+
+
+def partTwo(input):
+    print("Input: " + str(input))
+    savedValues = {
+        (0, 0): 1
+    }
+
+    x = 0
+    y = 0
+    radius = 0
+
+    def top_right_corner(r):
+        return (r, r)
+
+    def top_left_corner(r):
+        return (-r, r)
+
+    def bottom_left_corner(r):
+        return (-r, -r)
+
+    def bottom_right_corner(r):
+        return(r, -r)
+
+    def getValueForCoor(x, y, savedValues):
+        sum = 0
+        sum += savedValues.get((x + 1, y), 0)
+        sum += savedValues.get((x + 1, y + 1), 0)
+        sum += savedValues.get((x, y + 1), 0)
+        sum += savedValues.get((x - 1, y + 1), 0)
+        sum += savedValues.get((x - 1, y), 0)
+        sum += savedValues.get((x - 1, y - 1), 0)
+        sum += savedValues.get((x, y - 1), 0)
+        sum += savedValues.get((x + 1, y - 1), 0)
+        return sum
+
+    # Iterate in a spiral around (0,0)
+    currentValue = 1
+    done = False
+    while not done:
+        radius += 1
+        # We start from (radius, y)
+        # and traverse UP (increase y) until we hit top_right_corner
+        x = radius
+        while not done and y < top_right_corner(radius)[1]:
+            currentValue = getValueForCoor(x, y, savedValues)
+            savedValues[(x, y)] = currentValue
+            y += 1
+            if currentValue > input:
+                done = True
+
+        if not done:
+            assert((x, y) == top_right_corner(radius))
+
+        # We start from top_right_corner (radius, radius)
+        # and traverse LEFT (decrease X) until we hit top_left_corner
+        while not done and x > top_left_corner(radius)[0]:
+            currentValue = getValueForCoor(x, y, savedValues)
+            savedValues[(x, y)] = currentValue
+            x -= 1
+            if currentValue > input:
+                done = True
+
+        if not done:
+            assert((x, y) == top_left_corner(radius))
+
+        # We start from top_left_corner (-radius, radius)
+        # and traverse DOWN (decrease Y) until we hit bottom_left_corner
+        while not done and y > bottom_left_corner(radius)[1]:
+            currentValue = getValueForCoor(x, y, savedValues)
+            savedValues[(x, y)] = currentValue
+            y -= 1
+            if currentValue > input:
+                done = True
+
+        if not done:
+            assert((x, y) == bottom_left_corner(radius))
+
+        # We start from bottom_left_corner (-radius, -radius)
+        # and traverse RIGHT (increase X) until we hit bottom_right_corner
+        # This time we include the check for the bottom_right_corner
+        while not done and x <= bottom_right_corner(radius)[0]:
+            currentValue = getValueForCoor(x, y, savedValues)
+            savedValues[(x, y)] = currentValue
+            x += 1
+            if currentValue > input:
+                done = True
+
+    return currentValue
+
+assert(partTwo(1) == 2)
+assert(partTwo(2) == 4)
+assert(partTwo(25) == 26)
+assert(partTwo(300) == 304)
+assert(partTwo(747) == 806)
+print(partTwo(368078))
