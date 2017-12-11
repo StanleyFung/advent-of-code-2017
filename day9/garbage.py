@@ -151,4 +151,3 @@ def partTwo(input):
 
 personalTests("partTwo", partTwo)
 partTwo(getInput("day9/input"))
-
