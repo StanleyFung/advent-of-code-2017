@@ -45,7 +45,7 @@ def getInput(path):
         connectors = connectors.split(",")
         connectors = set(map(lambda w: w.strip(), connectors))
         connections[id] = connectors
-    # print(connections)
+
     return connections
 
 
@@ -64,6 +64,8 @@ def partOne(connections):
     answer = len(seenBefore)
     print(answer)
     return answer
+
+
 """
 --- Part Two ---
 
@@ -75,6 +77,7 @@ In the example above, there were 2 groups: one consisting of programs 0,2,3,4,5,
 
 How many groups are there in total?
 """
+
 
 def partTwo(connections):
     allProgs = set(connections.keys())
