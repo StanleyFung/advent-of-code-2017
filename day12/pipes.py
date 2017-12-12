@@ -64,6 +64,7 @@ def partOne(connections):
     answer = len(seenBefore)
     print(answer)
     return answer
+
 """
 --- Part Two ---
 
