@@ -123,7 +123,7 @@ def getInputPartTwo(path):
         line = list(map(lambda c: ord(c), line))
 
     line += suffix
-    print(line)
+    # print(line)
     return line
 
 def partTwo(lengths):
@@ -161,14 +161,18 @@ def partTwo(lengths):
         # Formats int into hex without 0x and with 2 digits
         result += "{:02x}".format(num)
 
-    print(result)
+    # print(result)
     return result
 
 def getInputPartTwoQuick(line):
     return list(map(lambda c: ord(c), line)) + [17, 31, 73, 47, 23]
 
+def knotHash(phrase):
+    return partTwo(getInputPartTwoQuick(phrase))
+
 assert(partTwo(getInputPartTwoQuick("")) == "a2582a3a0e66e6e86e3812dcb672a272")
 assert(partTwo(getInputPartTwoQuick("AoC 2017")) == "33efeb34ea91902bb2f59c9920caa6cd")
 assert(partTwo(getInputPartTwoQuick("1,2,3")) == "3efbe78a8d82f29979031a4aa0b16a9d")
 assert(partTwo(getInputPartTwoQuick("1,2,4")) == "63960835bcdc130f0b66d7ff4f6a5a8e")
+assert(knotHash("1,2,4") == "63960835bcdc130f0b66d7ff4f6a5a8e")
 partTwo(getInputPartTwo("day10/input"))
