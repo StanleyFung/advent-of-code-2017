@@ -169,26 +169,27 @@ def partTwo(input):
     waitingForRcvP0 = False
     waitingForRcvP1 = False
     numTimesP1SentVal = 0
+    numContextSwitches = 0
 
     while indexP0 >= 0 and indexP0 < len(input) and indexP1 >= 0 and indexP1 < len(input):
-        if isP0Turn:
-            print("P0 Turn")
-        else:
-            print("P1 Turn")
+        # if isP0Turn:
+        #     print("P0 Turn")
+        # else:
+        #     print("P1 Turn")
 
-        print("rcvQueueP0: " + str(rcvQueueP0))
-        print("rcvQueueP1: " + str(rcvQueueP1))
+        # print("rcvQueueP0: " + str(rcvQueueP0))
+        # print("rcvQueueP1: " + str(rcvQueueP1))
         index = indexP0 if isP0Turn else indexP1
-        print("Index: " + str(index))
+        # print("Index: " + str(index))
         registers = registersP0 if isP0Turn else registersP1
-        print(registers)
+        # print(registers)
         otherProgramQueue = rcvQueueP1 if isP0Turn else rcvQueueP0
         rcvQueue = rcvQueueP0 if isP0Turn else rcvQueueP1
         cmd = input[index]
-        print(cmd)
+        # print(cmd)
         parts = cmd.split()
         action = parts[0]
-        if action == "snd" or action == "rcv":
+        if len(parts) == 2:
             isArgNum = True
             argAsNum = None
             try:
@@ -198,7 +199,7 @@ def partTwo(input):
 
             if action == "snd":
                 if isArgNum:
-                    otherProgramQueue.append(int(parts[1]))
+                    otherProgramQueue.append(argAsNum)
                 else:
                     otherProgramQueue.append(registers.get(parts[1], 0))
 
@@ -221,12 +222,13 @@ def partTwo(input):
 
                         # Switch context to other program
                         isP0Turn = not isP0Turn
-                        print("---CONTEXT SWITCH---")
+                        numContextSwitches += 1
+                        print("---CONTEXT SWITCH " + str(numContextSwitches) + "---")
                         continue
                 else:
                     registers[parts[1]] = rcvQueue.popleft()
 
-        elif action == "set" or action == "add" or action == "mul" or action == "mod":
+        else:
             isSecondArgNum = True
             argAsNum = None
             try:
@@ -261,9 +263,18 @@ def partTwo(input):
                     registers[parts[1]] = registers.get(
                         parts[1], 0) % registers.get(parts[2], 1)
             elif action == "jgz":
-                valAtReg = registers.get(parts[1], 0)
-                if valAtReg > 0:
-                    arg = argAsNum if isArgNum else registers.get(parts[2], 0)
+                isFirstArgNum = True
+                firstArg = None
+                try:
+                    firstArg = int(parts[1])
+                except ValueError:
+                    isFirstArgNum = False
+
+                if not isFirstArgNum:
+                    firstArg = registers[parts[1]]
+
+                if firstArg > 0:
+                    arg = argAsNum if isSecondArgNum else registers.get(parts[2], 0)
                     if isP0Turn:
                         indexP0 += arg - 1
                     else:
